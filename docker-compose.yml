@@ -1,0 +1,32 @@
+services:
+  api:
+    container_name: manager-api
+    build: 
+      context: .
+    ports:
+      - 8080:80
+    restart: unless-stopped
+    networks:
+      - college_manager
+
+  mysql:
+    container_name: manager-db
+    image: mysql:8.0
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: college_manager
+      MYSQL_USER: api_user
+      MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: 1234
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - college_manager
+
+networks:
+  college_manager:
+
+volumes:
+  db_data:
