@@ -1,3 +1,5 @@
+version: '3.7'
+
 services:
   api:
     container_name: manager-api
@@ -8,6 +10,8 @@ services:
     restart: unless-stopped
     networks:
       - college_manager
+    volumes:
+      - ./:/var/www/html
 
   mysql:
     container_name: manager-db
