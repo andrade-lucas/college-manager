@@ -20,11 +20,15 @@ class AuthController extends Controller
             $request->name,
             $request->email,
             $request->password,
-            Carbon::createFromFormat('Y-m-d', $request->birthdate)->toDate()
+            $request->birthdate
+                ? Carbon::createFromFormat('Y-m-d', $request->birthdate)->toDate()
+                : null
         );
 
         $this->userService->register($registerUser);
 
-        return new JsonResponse([], 201);
+        return new JsonResponse([
+            'message' => 'User created with success!'
+        ], 201);
     }
 }
