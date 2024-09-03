@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\User\RegisterUserDTO;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterUserRequest;
+use App\Models\User;
 use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -30,5 +33,25 @@ class AuthController extends Controller
         return new JsonResponse([
             'message' => 'User created with success!'
         ], 201);
+    }
+    
+    public function login(LoginRequest $request): JsonResponse
+    {
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password
+        ];
+
+        $user = User::query()
+            ->where('email', $request->email)
+            ->first();
+
+        dd($user);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerateToken();
+
+            return new JsonResponse([], 200);
+        }
     }
 }
