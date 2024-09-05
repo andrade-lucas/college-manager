@@ -58,6 +58,9 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Validate the password of the user for the Passport password grant.
+     */
     public function validateForPassportPasswordGrant(string $password): bool
     {
         return Hash::check($password, $this->password);
